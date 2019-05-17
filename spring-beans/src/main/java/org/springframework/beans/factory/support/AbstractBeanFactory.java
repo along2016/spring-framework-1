@@ -263,8 +263,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.trace("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
-			//返回对应的实例，有时候存在诸如 BeanFactory 的情况并不是直接返回实例本身而是返回指定方法
-			//返回的实例
+			//返回对应的实例，有时候存在诸如 BeanFactory 的情况并不是直接返回实例本身而是返回指定
+			//方法返回的实例
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 		else {
@@ -279,6 +279,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			// Check if bean definition exists in this factory.
+			// 检查工厂中是否存在 bean 定义
 			BeanFactory parentBeanFactory = getParentBeanFactory();
 			//如果 beanDefinitionMap 中也就是在所有已经加载的类中不包括 beanName 则尝试从
 			//parentBeanFactory 中检测
@@ -315,6 +316,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				checkMergedBeanDefinition(mbd, beanName, args);
 
 				// Guarantee initialization of beans that the current bean depends on.
+				// 保证当前bean所依赖的bean的初始化。
 				String[] dependsOn = mbd.getDependsOn();
 				//若存在依赖则需要递归实例化依赖的 bean
 				if (dependsOn != null) {
@@ -1051,6 +1053,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * (within the current thread).
 	 * @param beanName the name of the bean
 	 */
+	/**
+	 * 返回当前是否正在创建指定的原型bean
+	 * @param beanName
+	 * @return
+	 */
 	protected boolean isPrototypeCurrentlyInCreation(String beanName) {
 		Object curVal = this.prototypesCurrentlyInCreation.get();
 		return (curVal != null &&
@@ -1147,6 +1154,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @param name the user-specified name
 	 * @return the transformed bean name
 	 */
+	/**
+	 *	将别名转换成规范名
+	 * @param name
+	 * @return
+	 */
 	protected String transformedBeanName(String name) {
 		return canonicalName(BeanFactoryUtils.transformedBeanName(name));
 	}
@@ -1225,6 +1237,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Return a merged RootBeanDefinition, traversing the parent bean definition
 	 * if the specified bean corresponds to a child bean definition.
+	 * （返回合并的RootBeanDefinition，如果指定的bean对应于子bean定义，则遍历父bean定义。）
 	 * @param beanName the name of the bean to retrieve the merged definition for
 	 * @return a (potentially merged) RootBeanDefinition for the given bean
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the given name
@@ -1271,6 +1284,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			RootBeanDefinition mbd = null;
 
 			// Check with full lock now in order to enforce the same merged instance.
+			// 现在检查full lock，以强制执行相同的合并实例。
 			if (containingBd == null) {
 				mbd = this.mergedBeanDefinitions.get(beanName);
 			}
@@ -1278,6 +1292,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			if (mbd == null) {
 				if (bd.getParentName() == null) {
 					// Use copy of given root bean definition.
+					// 使用给定root bean的副本
 					if (bd instanceof RootBeanDefinition) {
 						mbd = ((RootBeanDefinition) bd).cloneBeanDefinition();
 					}

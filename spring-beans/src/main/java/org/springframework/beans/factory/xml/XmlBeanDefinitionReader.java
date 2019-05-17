@@ -318,11 +318,15 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		}
 
 		//通过属性来记录已经加载的资源
+		//（线程安全 ，但这里 currentResources 应该本来就是线程安全的，所以推测不是为了线程安全
+		//应该是为了线程能使用同一个 currentResources，从这里可以看出作者对 ThreadLocal 的理解深刻）
 		Set<EncodedResource> currentResources = this.resourcesCurrentlyBeingLoaded.get();
 		if (currentResources == null) {
 			currentResources = new HashSet<>(4);
 			this.resourcesCurrentlyBeingLoaded.set(currentResources);
 		}
+		//这里其实就是为了避免循环加载，如果重复加载了相同的文件就会抛出异常
+		//这里看了半天才明白这个set的意图，蛋疼啊
 		if (!currentResources.add(encodedResource)) {
 			throw new BeanDefinitionStoreException(
 					"Detected cyclic loading of " + encodedResource + " - check your import definitions!");
@@ -348,7 +352,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 					"IOException parsing XML document from " + encodedResource.getResource(), ex);
 		}
 		finally {
+			// 既然使用 set 只是为了避免加载重复的相同的文件，那么使用结束后肯定要清空该 set
 			currentResources.remove(encodedResource);
+			// 如果 set 都空了，那么 resourcesCurrentlyBeingLoaded 也就没有存在的必要了，那就移去
 			if (currentResources.isEmpty()) {
 				this.resourcesCurrentlyBeingLoaded.remove();
 			}
