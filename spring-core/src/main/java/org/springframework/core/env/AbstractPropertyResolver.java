@@ -268,6 +268,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 		if (conversionServiceToUse == null) {
 			// Avoid initialization of shared DefaultConversionService if
 			// no standard type conversion is needed in the first place...
+			// 这里一般只有字符串类型才会命中
 			if (ClassUtils.isAssignableValue(targetType, value)) {
 				return (T) value;
 			}
