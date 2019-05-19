@@ -297,20 +297,21 @@ public class BeanDefinitionParserDelegate {
 	}
 
 	/**
-	 * Initialize the default lazy-init, autowire, dependency check settings,
-	 * init-method, destroy-method and merge settings. Support nested 'beans'
-	 * element use cases by falling back to the given parent in case the
+	 * Initialize the default lazy-init, autowire, dependency check（依赖检查） settings,
+	 * init-method, destroy-method and merge settings. Support nested（嵌套的） 'beans'
+	 * element use cases（用例） by falling back to the given parent in case the
 	 * defaults are not explicitly set locally.
 	 * @see #populateDefaults(DocumentDefaultsDefinition, DocumentDefaultsDefinition, org.w3c.dom.Element)
 	 * @see #getDefaults()
 	 */
 	public void initDefaults(Element root, @Nullable BeanDefinitionParserDelegate parent) {
+		//填充默认设置
 		populateDefaults(this.defaults, (parent != null ? parent.defaults : null), root);
 		this.readerContext.fireDefaultsRegistered(this.defaults);
 	}
 
 	/**
-	 * Populate the given DocumentDefaultsDefinition instance with the default lazy-init,
+	 * Populate（填充） the given DocumentDefaultsDefinition instance with the default lazy-init,
 	 * autowire, dependency check settings, init-method, destroy-method and merge settings.
 	 * Support nested 'beans' element use cases by falling back to {@code parentDefaults}
 	 * in case the defaults are not explicitly set locally.
@@ -321,7 +322,7 @@ public class BeanDefinitionParserDelegate {
 	protected void populateDefaults(DocumentDefaultsDefinition defaults, @Nullable DocumentDefaultsDefinition parentDefaults, Element root) {
 		String lazyInit = root.getAttribute(DEFAULT_LAZY_INIT_ATTRIBUTE);
 		if (DEFAULT_VALUE.equals(lazyInit)) {
-			// Potentially inherited from outer <beans> sections, otherwise falling back to false.
+			// Potentially inherited from（继承自） outer <beans> sections, otherwise falling back to（返回） false.
 			lazyInit = (parentDefaults != null ? parentDefaults.getLazyInit() : FALSE_VALUE);
 		}
 		defaults.setLazyInit(lazyInit);

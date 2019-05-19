@@ -152,7 +152,7 @@ public class ReaderContext {
 	// Explicit parse events
 
 	/**
-	 * Fire an defaults-registered event.
+	 * Fire（触发） an defaults-registered event.
 	 */
 	public void fireDefaultsRegistered(DefaultsDefinition defaultsDefinition) {
 		this.eventListener.defaultsRegistered(defaultsDefinition);
