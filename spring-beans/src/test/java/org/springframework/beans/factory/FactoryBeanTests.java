@@ -16,12 +16,7 @@
 
 package org.springframework.beans.factory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.Test;
-
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -30,8 +25,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static org.junit.Assert.*;
-import static org.springframework.tests.TestResourceUtils.*;
+import static org.springframework.tests.TestResourceUtils.qualifiedResource;
 
 /**
  * @author Rob Harrop
@@ -67,7 +66,7 @@ public class FactoryBeanTests {
 
 		Alpha alpha = (Alpha) factory.getBean("alpha");
 		Beta beta = (Beta) factory.getBean("beta");
-		Gamma gamma = (Gamma) factory.getBean("gamma");
+		Gamma gamma = (Gamma) factory.getBean("gamma");		// Gamma对象是单例
 		Gamma gamma2 = (Gamma) factory.getBean("gammaFactory");
 
 		assertSame(beta, alpha.getBeta());
@@ -80,9 +79,6 @@ public class FactoryBeanTests {
 	public void testFactoryBeansWithIntermediateFactoryBeanAutowiringFailure() throws Exception {
 		DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
 		new XmlBeanDefinitionReader(factory).loadBeanDefinitions(WITH_AUTOWIRING_CONTEXT);
-
-		BeanFactoryPostProcessor ppc = (BeanFactoryPostProcessor) factory.getBean("propertyPlaceholderConfigurer");
-		ppc.postProcessBeanFactory(factory);
 
 		Beta beta = (Beta) factory.getBean("beta");
 		Alpha alpha = (Alpha) factory.getBean("alpha");
