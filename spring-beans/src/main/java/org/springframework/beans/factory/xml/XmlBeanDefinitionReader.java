@@ -255,6 +255,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	/**
 	 * Return the EntityResolver to use, building a default resolver
 	 * if none specified.
+	 * （获取实体解析器）
 	 */
 	protected EntityResolver getEntityResolver() {
 		if (this.entityResolver == null) {
