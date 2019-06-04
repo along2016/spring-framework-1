@@ -77,7 +77,6 @@ public abstract class AbstractAspectJAdvisorFactoryTests {
 	 */
 	protected abstract AspectJAdvisorFactory getFixture();
 
-
 	@Test
 	public void testRejectsPerCflowAspect() {
 		try {
