@@ -104,16 +104,22 @@ public class FactoryBeanTests {
 	@Test
 	public void testCircularReferenceWithPostProcessor() {
 		DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+		// 加载 FactoryBeanTests-circular.xml 配置文件，初始化其中的类对象
 		new XmlBeanDefinitionReader(factory).loadBeanDefinitions(CIRCULAR_CONTEXT);
 
 		CountingPostProcessor counter = new CountingPostProcessor();
 		factory.addBeanPostProcessor(counter);
 
 		BeanImpl1 impl1 = factory.getBean(BeanImpl1.class);
+		BeanImpl2 impl2 = factory.getBean(BeanImpl2.class);
 		assertNotNull(impl1);
 		assertNotNull(impl1.getImpl2());
-		assertNotNull(impl1.getImpl2());
 		assertSame(impl1, impl1.getImpl2().getImpl1());
+
+		assertNotNull(impl2);
+		assertNotNull(impl2.getImpl1());
+		assertSame(impl2, impl2.getImpl1().getImpl2());
+
 		assertEquals(1, counter.getCount("bean1"));
 		assertEquals(1, counter.getCount("bean2"));
 	}

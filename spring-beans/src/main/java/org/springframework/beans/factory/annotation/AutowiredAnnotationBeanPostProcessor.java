@@ -71,8 +71,13 @@ import org.springframework.util.StringUtils;
  * Such members to be injected are detected through a Java 5 annotation: by default,
  * Spring's {@link Autowired @Autowired} and {@link Value @Value} annotations.
  *
+ * （BeanPostProcessor 实现自动装配的带注解的字段，setter方法和任意的配置方法，
+ * 这些要注入的成员是通过Java 5 的注解检测到的，默认的是 Spring 的@Autowired 和 @Value 两个注解）
+ *
  * <p>Also supports JSR-330's {@link javax.inject.Inject @Inject} annotation,
  * if available, as a direct alternative to Spring's own {@code @Autowired}.
+ *
+ * （还支持 JSR-330 的@Inject注解，如有可能，可以直接替代Spring自己的@Autowired）
  *
  * <p>Only one constructor (at max) of any given bean class may carry this
  * annotation with the 'required' parameter set to {@code true},
@@ -83,6 +88,9 @@ import org.springframework.util.StringUtils;
  * beans in the Spring container will be chosen. If none of the candidates
  * can be satisfied, then a default constructor (if present) will be used.
  * An annotated constructor does not have to be public.
+ *
+ * （任何给定bean类中最多只有一个构造函数可以携带这个注解，并将“required”参数设置为true，
+ *  这表明在将构造函数用作Spring bean时，它将自动装配。）
  *
  * <p>Fields are injected right after construction of a bean, before any
  * config methods are invoked. Such a config field does not have to be public.
