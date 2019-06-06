@@ -90,7 +90,10 @@ import org.springframework.util.StringUtils;
  * An annotated constructor does not have to be public.
  *
  * （任何给定bean类中最多只有一个构造函数可以携带这个注解，并将“required”参数设置为true，
- *  这表明在将构造函数用作Spring bean时，它将自动装配。）
+ *  这表明在将构造函数用作Spring bean时，它将自动装配。如果多个非必需的构造函数都带注解，
+ *  那么它们将被视为自动装配的候选构造函数。
+ *  通过匹配Spring容器中的bean来选择依赖关系最多的构造函数。
+ * 	如果没有一个候选项可以满足，那么将使用缺省构造函数(如果存在)。带注解的构造函数不必是公共的）
  *
  * <p>Fields are injected right after construction of a bean, before any
  * config methods are invoked. Such a config field does not have to be public.
