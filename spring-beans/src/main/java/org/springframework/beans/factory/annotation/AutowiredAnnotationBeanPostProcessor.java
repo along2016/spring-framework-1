@@ -92,16 +92,21 @@ import org.springframework.util.StringUtils;
  * （任何给定bean类中最多只有一个构造函数可以携带这个注解，并将“required”参数设置为true，
  *  这表明在将构造函数用作Spring bean时，它将自动装配。如果多个非必需的构造函数都带注解，
  *  那么它们将被视为自动装配的候选构造函数。
- *  通过匹配Spring容器中的bean来选择依赖关系最多的构造函数。
+ *  将选择具有最大数量依赖关系的构造函数，这些构造函数可以通过匹配Spring容器中的bean来满足。
  * 	如果没有一个候选项可以满足，那么将使用缺省构造函数(如果存在)。带注解的构造函数不必是公共的）
  *
  * <p>Fields are injected right after construction of a bean, before any
  * config methods are invoked. Such a config field does not have to be public.
  *
+ * （在调用任何配置方法之前，构造bean之后立即注入字段。这样的配置字段不必是公共的。）
+ *
  * <p>Config methods may have an arbitrary name and any number of arguments; each of
  * those arguments will be autowired with a matching bean in the Spring container.
  * Bean property setter methods are effectively just a special case of such a
  * general config method. Config methods do not have to be public.
+ *
+ * （配置方法可以有任意名称和任意数量的参数;每个参数都将使用Spring容器中匹配的bean进行自动装配。
+ *  Bean属性的setter方法实际上只是这种通用配置方法的一个特例。配置方法不必是公开的。）
  *
  * <p>Note: A default AutowiredAnnotationBeanPostProcessor will be registered
  * by the "context:annotation-config" and "context:component-scan" XML tags.
@@ -111,11 +116,19 @@ import org.springframework.util.StringUtils;
  * thus the latter configuration will override the former for properties wired through
  * both approaches.
  *
+ * （注意：默认的AutowiredAnnotationBeanPostProcessor将由“context：annotation-config”
+ * 和“context：component-scan”XML标记注册。如果要指定自定义AutowiredAnnotationBeanPostProcessor bean定义，
+ * 请删除或关闭默认注释配置。
+ *
  * <p>In addition to regular injection points as discussed above, this post-processor
  * also handles Spring's {@link Lookup @Lookup} annotation which identifies lookup
  * methods to be replaced by the container at runtime. This is essentially a type-safe
  * version of {@code getBean(Class, args)} and {@code getBean(String, args)},
  * See {@link Lookup @Lookup's javadoc} for details.
+ *
+ * 注意：注释注入将在XML注入之前执行;因此后一种配置将覆盖通过两种方法连接的属性的前者。
+ *
+ * 除了上面讨论的常规注入点之外，这个后处理器还处理Spring的@Lookup注释，该注释标识了在运行时由容器替换的查找方法。
  *
  * @author Juergen Hoeller
  * @author Mark Fisher
