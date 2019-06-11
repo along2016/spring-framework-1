@@ -117,8 +117,9 @@ import org.springframework.util.StringUtils;
  * both approaches.
  *
  * （注意：默认的AutowiredAnnotationBeanPostProcessor将由“context：annotation-config”
- * 和“context：component-scan”XML标记注册。如果要指定自定义AutowiredAnnotationBeanPostProcessor bean定义，
- * 请删除或关闭默认注释配置。
+ * 	和“context：component-scan”XML标签注册。如果你要指定自定义的 AutowiredAnnotationBeanPostProcessor bean 定义，
+ * 	请删除或关闭默认注解配置。
+ * 	注意：注解注入将在XML注入之前执行;因此后面的配置会覆盖前面已经装配好的元素。）
  *
  * <p>In addition to regular injection points as discussed above, this post-processor
  * also handles Spring's {@link Lookup @Lookup} annotation which identifies lookup
@@ -126,9 +127,8 @@ import org.springframework.util.StringUtils;
  * version of {@code getBean(Class, args)} and {@code getBean(String, args)},
  * See {@link Lookup @Lookup's javadoc} for details.
  *
- * 注意：注释注入将在XML注入之前执行;因此后一种配置将覆盖通过两种方法连接的属性的前者。
- *
- * 除了上面讨论的常规注入点之外，这个后处理器还处理Spring的@Lookup注释，该注释标识了在运行时由容器替换的查找方法。
+ * （除了上面讨论的常规注入点之外，这个后处理器还处理Spring的{@link Lookup @Lookup}注解，
+ * 	该注解标识了要在运行时由容器替换的查找方法）
  *
  * @author Juergen Hoeller
  * @author Mark Fisher
