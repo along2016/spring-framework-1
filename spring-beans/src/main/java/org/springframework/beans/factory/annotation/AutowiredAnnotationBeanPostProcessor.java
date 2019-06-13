@@ -190,6 +190,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	 * <p>This setter property exists so that developers can provide their own
 	 * (non-Spring-specific) annotation type to indicate that a member is
 	 * supposed to be autowired.
+	 *
+	 * 	设置所支持的自动配置注解，缺省情况下所支持的自动配置注解是@Autowired, @Value, @Inject,
+	 * 	但通过该方法，开发人员可以提供一个自定义的自动配置注解，而非Spring所提供的标准注解方式。
 	 */
 	public void setAutowiredAnnotationType(Class<? extends Annotation> autowiredAnnotationType) {
 		Assert.notNull(autowiredAnnotationType, "'autowiredAnnotationType' must not be null");
@@ -216,6 +219,8 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	 * Set the name of a parameter of the annotation that specifies
 	 * whether it is required.
 	 * @see #setRequiredParameterValue(boolean)
+	 *
+	 * （设置必需的注解参数的名称）
 	 */
 	public void setRequiredParameterName(String requiredParameterName) {
 		this.requiredParameterName = requiredParameterName;
@@ -251,8 +256,13 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	}
 
 
+	/**
+	 * 在每个bean实例化后，初始化前执行，获取并记录该bean属性注入的元数据，在随后的属性注入时使用
+	 * 该方法由接口 MergedBeanDefinitionPostProcessor 定义
+	 */
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		// 获取指定bean的属性注入元数据
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);
 		metadata.checkConfigMembers(beanDefinition);
 	}
@@ -437,7 +447,14 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		}
 	}
 
-
+	/**
+	 * 获取指定bean的注入元数据，使用了缓存机制，首先从缓存中尝试获取，如果缓存中没找到，从bean类上
+	 * 直接获取并缓存
+	 * @param beanName
+	 * @param clazz
+	 * @param pvs
+	 * @return
+	 */
 	private InjectionMetadata findAutowiringMetadata(String beanName, Class<?> clazz, @Nullable PropertyValues pvs) {
 		// Fall back to class name as cache key, for backwards compatibility with custom callers.
 		String cacheKey = (StringUtils.hasLength(beanName) ? beanName : clazz.getName());
@@ -450,6 +467,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
+					// 直接从bean类上获取注入元数据并缓存
 					metadata = buildAutowiringMetadata(clazz);
 					this.injectionMetadataCache.put(cacheKey, metadata);
 				}
@@ -458,6 +476,14 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		return metadata;
 	}
 
+	/**
+	 * 从bean的类clazz开始沿着继承链遍历直到遇到null或者基类Object结束，遍历遇到的每个类声明
+	 * 的实例成员属性/成员方法(注意:静态成员属性方法会被排除)查看其是否需要自动装配，如果该
+	 * 实例成员属性/成员方法需要自动装配，将它们包装成AutowiredFieldElement/AutowiredMethodElement
+	 * 然后放在同一个InjectionMetadata对象中返回。
+	 * @param clazz
+	 * @return
+	 */
 	private InjectionMetadata buildAutowiringMetadata(final Class<?> clazz) {
 		List<InjectionMetadata.InjectedElement> elements = new ArrayList<>();
 		Class<?> targetClass = clazz;
