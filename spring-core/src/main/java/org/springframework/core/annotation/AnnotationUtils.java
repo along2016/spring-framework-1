@@ -1302,6 +1302,9 @@ public abstract class AnnotationUtils {
 	 * <p>Specifically, this method enforces <em>attribute alias</em> semantics
 	 * for annotation attributes that are annotated with {@link AliasFor @AliasFor}
 	 * and replaces default value placeholders with their original default values.
+	 * （对参数中的 AnnotationAttributes 进行后处理。具体地说，这个方法为使用 @AliasFor 注解的属性强制使用属性别名语义，
+	 *  并用它们的原始默认值替换默认值占位符。）
+	 *
 	 * @param annotatedElement the element that is annotated with an annotation or
 	 * annotation hierarchy from which the supplied attributes were created;
 	 * may be {@code null} if unknown
