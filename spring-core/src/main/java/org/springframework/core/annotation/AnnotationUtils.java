@@ -1115,8 +1115,11 @@ public abstract class AnnotationUtils {
 	private static AnnotationAttributes getAnnotationAttributes(@Nullable Object annotatedElement,
 			Annotation annotation, boolean classValuesAsString, boolean nestedAnnotationsAsMap) {
 
+		// 检索注解属性
 		AnnotationAttributes attributes =
 				retrieveAnnotationAttributes(annotatedElement, annotation, classValuesAsString, nestedAnnotationsAsMap);
+
+		// 对注解属性进行后续处理
 		postProcessAnnotationAttributes(annotatedElement, attributes, classValuesAsString, nestedAnnotationsAsMap);
 		return attributes;
 	}
@@ -1125,6 +1128,10 @@ public abstract class AnnotationUtils {
 	 * Retrieve the given annotation's attributes as an {@link AnnotationAttributes} map.
 	 * <p>This method provides fully recursive annotation reading capabilities on par with
 	 * the reflection-based {@link org.springframework.core.type.StandardAnnotationMetadata}.
+	 *
+	 * （检索给定的注解属性，并封装成 AnnotationAttributes map。这个方法提供了与基于反射的
+	 *  StandardAnnotationMetadata 相同的完整的递归注解读取功能）
+	 *
 	 * <p><strong>NOTE</strong>: This variant of {@code getAnnotationAttributes()} is
 	 * only intended for use within the framework. The following special rules apply:
 	 * <ol>
@@ -1134,9 +1141,20 @@ public abstract class AnnotationUtils {
 	 * ensure that placeholders have been replaced by actual default values and
 	 * in order to enforce {@code @AliasFor} semantics.</li>
 	 * </ol>
+	 *
+	 * （注意：getAnnotationAttributes() 的这种变体仅用于框架中。适用于下列特别规则：
+	 * 	1、默认值被替换为默认占位符；
+	 * 	2、最终得到的合并注解属性应该是后处理的 postProcessAnnotationAttributes，
+	 * 	以确保占位符已被实际默认值替换，并强制执行 @AliasFor 语义。
+	 * 	）
+	 *
 	 * @param annotatedElement the element that is annotated with the supplied annotation;
 	 * may be {@code null} if unknown
+	 * （使用提供的注解进行注解的元素，该参数可为空）
+	 *
 	 * @param annotation the annotation to retrieve the attributes for
+	 * （用于检索属性的注解）
+	 *
 	 * @param classValuesAsString whether to convert Class references into Strings (for
 	 * compatibility with {@link org.springframework.core.type.AnnotationMetadata})
 	 * or to preserve them as Class references
@@ -1179,18 +1197,23 @@ public abstract class AnnotationUtils {
 
 	/**
 	 * Adapt the given value according to the given class and nested annotation settings.
+	 * （根据给定的类和嵌套注解设置调整给定的值）
 	 * <p>Nested annotations will be
 	 * {@linkplain #synthesizeAnnotation(Annotation, AnnotatedElement) synthesized}.
 	 * @param annotatedElement the element that is annotated, used for contextual
 	 * logging; may be {@code null} if unknown
 	 * @param value the annotation attribute value
 	 * @param classValuesAsString whether to convert Class references into Strings (for
-	 * compatibility with {@link org.springframework.core.type.AnnotationMetadata})
+	 * compatibility with（与...兼容） {@link org.springframework.core.type.AnnotationMetadata})
 	 * or to preserve them as Class references
+	 * 是将类引用转换成 String(为了与 AnnotationMetadata 兼容) 还是将它们仍保留为类引用
+	 *
 	 * @param nestedAnnotationsAsMap whether to convert nested annotations into
 	 * {@link AnnotationAttributes} maps (for compatibility with
 	 * {@link org.springframework.core.type.AnnotationMetadata}) or to preserve them as
 	 * {@code Annotation} instances
+	 *  是将内嵌的注解转换成map（为了与 AnnotationMetadata 兼容）还是将它们仍保留为 Annotation 实例
+	 *
 	 * @return the adapted value, or the original value if no adaptation is needed
 	 */
 	@Nullable
