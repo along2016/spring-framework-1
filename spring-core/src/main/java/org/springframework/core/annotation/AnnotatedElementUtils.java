@@ -1607,7 +1607,7 @@ public abstract class AnnotatedElementUtils {
 						}
 					}
 
-					overrideAttributes(element, annotation, attributes, attributeName, targetAttributeNames);
+					overrideAttributes(element , annotation, attributes, attributeName, targetAttributeNames);
 				}
 				// Implicit annotation attribute override based on convention
 				else if (!AnnotationUtils.VALUE.equals(attributeName) && attributes.containsKey(attributeName)) {

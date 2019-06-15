@@ -1571,6 +1571,13 @@ public abstract class AnnotationUtils {
 		return synthesizeAnnotation(annotation, (Object) annotatedElement);
 	}
 
+	/**
+	 * 合成注解
+	 * @param annotation
+	 * @param annotatedElement
+	 * @param <A>
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	static <A extends Annotation> A synthesizeAnnotation(A annotation, @Nullable Object annotatedElement) {
 		if (annotation instanceof SynthesizedAnnotation || hasPlainJavaAnnotationsOnly(annotatedElement)) {
