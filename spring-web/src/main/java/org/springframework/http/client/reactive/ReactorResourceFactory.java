@@ -32,9 +32,12 @@ import org.springframework.util.Assert;
  * Factory to manage Reactor Netty resources, i.e. {@link LoopResources} for
  * event loop threads, and {@link ConnectionProvider} for the connection pool,
  * within the lifecycle of a Spring {@code ApplicationContext}.
+ *（在Spring ApplicationContext 的生命周期内，这个工厂用来管理Reactor Netty资源，
+ * 比如事件循环线程的 LoopResources 和 连接池的 ConnectionProvider）
  *
  * <p>This factory implements {@link InitializingBean} and {@link DisposableBean}
  * and is expected typically to be declared as a Spring-managed bean.
+ * （这个工厂实现了InitializingBean 和 DisposableBean 并且通常被声明为spring管理的bean）
  *
  * @author Rossen Stoyanchev
  * @since 5.1
