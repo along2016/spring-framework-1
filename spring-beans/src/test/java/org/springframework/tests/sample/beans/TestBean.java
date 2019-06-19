@@ -59,6 +59,7 @@ public class TestBean implements BeanNameAware, BeanFactoryAware, ITestBean, IOt
 
 	private boolean jedi;
 
+	//配偶
 	private ITestBean spouse;
 
 	protected ITestBean[] spouses;
