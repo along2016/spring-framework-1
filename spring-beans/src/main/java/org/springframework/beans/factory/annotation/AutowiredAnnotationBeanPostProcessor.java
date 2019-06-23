@@ -405,6 +405,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
+		// 从缓存中找到此类的@Autowired元数据，尝试注入。没有@Autowired则会略过
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
 		try {
 			metadata.inject(bean, beanName, pvs);
@@ -448,8 +449,8 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	}
 
 	/**
-	 * 获取指定bean的注入元数据，使用了缓存机制，首先从缓存中尝试获取，如果缓存中没找到，从bean类上
-	 * 直接获取并缓存
+	 * 获取指定bean的注入元数据，使用了缓存机制，首先从缓存中尝试获取，
+	 * 如果缓存中没找到，从bean类上	直接获取并缓存
 	 * @param beanName
 	 * @param clazz
 	 * @param pvs
@@ -492,14 +493,17 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			final List<InjectionMetadata.InjectedElement> currElements = new ArrayList<>();
 
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
+				// 如果类内的属性上有@Autowired注解，则用工具类获取注解信息
 				AnnotationAttributes ann = findAutowiredAnnotation(field);
 				if (ann != null) {
+					// @Autowired注解不支持静态方法
 					if (Modifier.isStatic(field.getModifiers())) {
 						if (logger.isInfoEnabled()) {
 							logger.info("Autowired annotation is not supported on static fields: " + field);
 						}
 						return;
 					}
+					// 获取@Autowired注解的required的属性值，如果true，但注入失败会抛出异常，false则不会
 					boolean required = determineRequiredStatus(ann);
 					currElements.add(new AutowiredFieldElement(field, required));
 				}
@@ -510,14 +514,18 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 				if (!BridgeMethodResolver.isVisibilityBridgeMethodPair(method, bridgedMethod)) {
 					return;
 				}
+				// 如果方法上有@Autowired注解，则获取注解信息
 				AnnotationAttributes ann = findAutowiredAnnotation(bridgedMethod);
 				if (ann != null && method.equals(ClassUtils.getMostSpecificMethod(method, clazz))) {
+					// @Autowired不支持静态方法
 					if (Modifier.isStatic(method.getModifiers())) {
 						if (logger.isInfoEnabled()) {
 							logger.info("Autowired annotation is not supported on static methods: " + method);
 						}
 						return;
 					}
+					// @Autowired注解标识在方法上的目的就是将容器内的Bean注入到方法的参数中，
+					// 没有参数就违背了初衷
 					if (method.getParameterCount() == 0) {
 						if (logger.isInfoEnabled()) {
 							logger.info("Autowired annotation should only be used on methods with parameters: " +
@@ -643,6 +651,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 				Assert.state(beanFactory != null, "No BeanFactory available");
 				TypeConverter typeConverter = beanFactory.getTypeConverter();
 				try {
+					// 如果@Autowired标识的属性有一个合适的待注入对象，则缓存这个Bean的名称，
+					// 如果再次生成这个Bean时，就不需要重新按类型去搜索Spring容器，
+					// 直接获取这个缓存Bean的名称
 					value = beanFactory.resolveDependency(desc, beanName, autowiredBeanNames, typeConverter);
 				}
 				catch (BeansException ex) {
@@ -652,9 +663,12 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 					if (!this.cached) {
 						if (value != null || this.required) {
 							this.cachedFieldValue = desc;
+							// 注册Bean依赖
 							registerDependentBeans(beanName, autowiredBeanNames);
 							if (autowiredBeanNames.size() == 1) {
 								String autowiredBeanName = autowiredBeanNames.iterator().next();
+								// @Autowired标识属性类型和Bean的类型要匹配，因此Array,Collection,
+								// Map类型的属性不支持缓存属性Bean名称
 								if (beanFactory.containsBean(autowiredBeanName) &&
 										beanFactory.isTypeMatch(autowiredBeanName, field.getType())) {
 									this.cachedFieldValue = new ShortcutDependencyDescriptor(
@@ -671,6 +685,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			}
 			if (value != null) {
 				ReflectionUtils.makeAccessible(field);
+				// 通过反射为属性赋值
 				field.set(bean, value);
 			}
 		}

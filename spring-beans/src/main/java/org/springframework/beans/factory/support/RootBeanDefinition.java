@@ -140,7 +140,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	 * through calling the given supplier (possibly a lambda or method reference).
 	 * @param beanClass the class of the bean to instantiate
 	 * @param instanceSupplier the supplier to construct a bean instance,
-	 * as an alternative to a declaratively specified factory method
+	 * as an alternative to a declaratively（以声明的方式） specified factory method
 	 * @since 5.0
 	 * @see #setInstanceSupplier
 	 */
@@ -187,6 +187,9 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	/**
 	 * Create a new RootBeanDefinition for a singleton,
 	 * providing constructor arguments and property values.
+	 *
+	 * （为单例创建一个新的RootBeanDefinition，提供构造函数参数和属性值。）
+	 *
 	 * @param beanClass the class of the bean to instantiate
 	 * @param cargs the constructor argument values to apply
 	 * @param pvs the property values to apply

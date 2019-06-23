@@ -34,8 +34,13 @@ import org.springframework.util.ObjectUtils;
 /**
  * Holder for constructor argument values, typically as part of a bean definition.
  *
+ * 构造参数，保存了构造方法所有的参数值，通常作为bean definition的一部分来使用。
+ *
  * <p>Supports values for a specific index in the constructor argument list
  * as well as for generic argument matches by type.
+ *
+ * 它不仅支持类型匹配的普通参数，也支持根据参数列表中的索引位置来提供参数。
+ * 提供了两个变量来保存参数：带索引的和不带索引的
  *
  * @author Juergen Hoeller
  * @since 09.11.2003

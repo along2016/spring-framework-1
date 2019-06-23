@@ -46,6 +46,11 @@ import org.springframework.util.Assert;
  * the {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}
  * interface in order to allow for applying any bean definition readers to it.
  *
+ * (Generic ApplicationContext 持有一个DefaultListableBeanFactory实例，
+ * 并且没有假设一个特定的bean definition 的format。实现了BeanDefinitionRegistry
+ * 接口以允许配置任何bean definition reader（也可以不是XmlBeanDefinitionReader）。
+ *)
+ *
  * <p>Typical usage is to register a variety of bean definitions via the
  * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}
  * interface and then call {@link #refresh()} to initialize those beans
@@ -54,10 +59,18 @@ import org.springframework.util.Assert;
  * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor BeanFactoryPostProcessors},
  * etc).
  *
+ * 使用时通常要通过BeandefinitionRegistry接口注册一些bean definition
+ * 然后调用AbstractApplicationContext.refresh()用application context
+ * 的语义来初始化beans（如ApplicationContextAware和auto-detecting BeanFactoryPostProcessors等）。
+ *
  * <p>In contrast to other ApplicationContext implementations that create a new
  * internal BeanFactory instance for each refresh, the internal BeanFactory of
  * this context is available right from the start, to be able to register bean
  * definitions on it. {@link #refresh()} may only be called once.
+ *
+ * 和其他在每次refresh时都创建一个新的内部BeanFactory实例的ApplicationContext实例不同，
+ * 本类中的BeanFactory从一开始就创建好，并可在其中注册bean definitions，
+ * refresh方法可能在其中只调用一次。
  *
  * <p>Usage example:
  *
@@ -79,9 +92,16 @@ import org.springframework.util.Assert;
  * definition formats. The equivalent in a web environment is
  * {@link org.springframework.web.context.support.XmlWebApplicationContext}.
  *
+ * 一般情况下使用ClassPathXmlApplicationContext或者
+ * FileSystemXmlApplicationContext会比这个GenericApplicationContext更方便但相应地缺少灵活性，
+ * 因为只能使用特定Bean definition格式和加载路径。
+ *
  * <p>For custom application context implementations that are supposed to read
  * special bean definition formats in a refreshable manner, consider deriving
  * from the {@link AbstractRefreshableApplicationContext} base class.
+ *
+ * 要追求定制化的ApplicationContext实现，请阅读refreshable的说明中特殊bean definition 的格式，
+ * 可从AbstractRefreshableApplicationContext继承。
  *
  * @author Juergen Hoeller
  * @author Chris Beams
