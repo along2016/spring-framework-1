@@ -75,6 +75,7 @@ public class XmlValidationModeDetector {
 
 	/**
 	 * Indicates whether or not the current parse position is inside an XML comment.
+	 * （指示当前解析位置是否在XML注释中）
 	 */
 	private boolean inComment;
 

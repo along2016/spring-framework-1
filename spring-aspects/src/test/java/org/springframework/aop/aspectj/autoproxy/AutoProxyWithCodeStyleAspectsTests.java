@@ -27,7 +27,7 @@ public class AutoProxyWithCodeStyleAspectsTests {
 
 	@Test
 	@SuppressWarnings("resource")
-	public void noAutoproxyingOfAjcCompiledAspects() {
+	public void noAutoProxyingOfAjcCompiledAspects() {
 		new ClassPathXmlApplicationContext("org/springframework/aop/aspectj/autoproxy/ajcAutoproxyTests.xml");
 	}
 
