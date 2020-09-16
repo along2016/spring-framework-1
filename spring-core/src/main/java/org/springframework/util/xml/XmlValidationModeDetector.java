@@ -96,7 +96,7 @@ public class XmlValidationModeDetector {
 			String content;
 			while ((content = reader.readLine()) != null) {
 				content = consumeCommentTokens(content);
-				//如果读取的行是空或者注释则略过
+				// 如果读取的行是空或者注释则略过
 				if (this.inComment || !StringUtils.hasText(content)) {
 					continue;
 				}
@@ -104,7 +104,7 @@ public class XmlValidationModeDetector {
 					isDtdValidated = true;
 					break;
 				}
-				//读取到<开始符号，验证模式一定会在开始符号之前
+				// hasOpeningTag 方法会校验，如果这一行有 < ，并且 < 后面跟着的是字母，则返回true。
 				if (hasOpeningTag(content)) {
 					// End of meaningful data...
 					break;
@@ -139,6 +139,25 @@ public class XmlValidationModeDetector {
 		if (this.inComment) {
 			return false;
 		}
+		/**
+		 *  第一行：<?xml version="1.0" encoding="UTF-8"?>
+		 *
+		 *     openTagIndex > -1，0 > -1 ：true
+		 *
+		 *     (content.length() > openTagIndex + 1) ：true
+		 *
+		 *     Character.isLetter("?") ：? 不是字母 false
+		 *
+		 *   第二行：<beans xmlns="http://www.springframework.org/schema/beans"
+		 *
+		 *     openTagIndex > -1 ，0 > -1 ：true
+		 *
+		 *     (content.length() > openTagIndex + 1) ：true
+		 *
+		 *     Character.isLetter("b") ：true
+		 *
+		 *     此时会结束方法调用处的 while 循环
+		 */
 		int openTagIndex = content.indexOf('<');
 		return (openTagIndex > -1 && (content.length() > openTagIndex + 1) &&
 				Character.isLetter(content.charAt(openTagIndex + 1)));

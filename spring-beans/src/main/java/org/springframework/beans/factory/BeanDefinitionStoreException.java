@@ -23,6 +23,8 @@ import org.springframework.lang.Nullable;
  * Exception thrown when a BeanFactory encounters an invalid bean definition:
  * e.g. in case of incomplete or contradictory bean metadata.
  *
+ * 当 BeanFactory 遇到无效 bean 定义时抛出异常：例如，不完整或矛盾的 bean 元数据
+ *
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Rob Harrop
