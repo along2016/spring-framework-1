@@ -41,7 +41,7 @@ import org.springframework.util.ResourceUtils;
  */
 
 /**
- * 定义资源加载器，主要应用于根据定义的资源文件地址返回对应的Resource
+ * 定义资源加载器，主要应用于根据定义的资源文件地址返回对应的 Resource
  */
 public interface ResourceLoader {
 
