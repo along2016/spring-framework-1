@@ -58,11 +58,11 @@ public abstract class BeanDefinitionReaderUtils {
 			@Nullable String parentName, @Nullable String className, @Nullable ClassLoader classLoader) throws ClassNotFoundException {
 
 		GenericBeanDefinition bd = new GenericBeanDefinition();
-		//parentName 可能为空
+		// parentName 可能为空
 		bd.setParentName(parentName);
 		if (className != null) {
 			if (classLoader != null) {
-				//如果classLoader不为空，则使用以传入的 classLoader 同一虚拟机加载类对象，
+				// 如果classLoader不为空，则使用以传入的 classLoader 同一虚拟机加载类对象，
 				// 否则只是记录className
 				bd.setBeanClass(ClassUtils.forName(className, classLoader));
 			}
@@ -121,7 +121,7 @@ public abstract class BeanDefinitionReaderUtils {
 					"'class' nor 'parent' nor 'factory-bean' - can't generate bean name");
 		}
 
-		String id = generatedBeanName;
+		String id;
 		if (isInnerBean) {
 			// Inner bean: generate identity hashcode suffix.
 			id = generatedBeanName + GENERATED_BEAN_NAME_SEPARATOR + ObjectUtils.getIdentityHexString(definition);
@@ -156,8 +156,8 @@ public abstract class BeanDefinitionReaderUtils {
 
 	/**
 	 * Register the given bean definition with the given bean factory.
-	 * @param definitionHolder the bean definition including name and aliases
-	 * @param registry the bean factory to register with
+	 * @param definitionHolder the bean definition including name and aliases（包括名称和别名的 bean 定义）
+	 * @param registry the bean factory to register with（要注册的 bean 工厂）
 	 * @throws BeanDefinitionStoreException if registration failed
 	 */
 	public static void registerBeanDefinition(
@@ -165,12 +165,12 @@ public abstract class BeanDefinitionReaderUtils {
 			throws BeanDefinitionStoreException {
 
 		// Register bean definition under primary name.
-		//使用beanName做唯一标识注册
+		// 使用 beanName 做唯一标识注册
 		String beanName = definitionHolder.getBeanName();
 		registry.registerBeanDefinition(beanName, definitionHolder.getBeanDefinition());
 
 		// Register aliases for bean name, if any.
-		//注册所有的别名
+		// 注册所有的别名
 		String[] aliases = definitionHolder.getAliases();
 		if (aliases != null) {
 			for (String alias : aliases) {
