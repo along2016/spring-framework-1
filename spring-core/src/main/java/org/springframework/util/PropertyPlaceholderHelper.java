@@ -127,14 +127,16 @@ public class PropertyPlaceholderHelper {
 		return parseStringValue(value, placeholderResolver, new HashSet<>());
 	}
 
-	//递归解析带占位符的属性为字符串
+	/**
+	 * 递归解析带占位符的属性为字符串
+	 */
 	protected String parseStringValue(
 			String value, PlaceholderResolver placeholderResolver, Set<String> visitedPlaceholders) {
 
 		StringBuilder result = new StringBuilder(value);
 		int startIndex = value.indexOf(this.placeholderPrefix);
 		while (startIndex != -1) {
-			//搜索第一个占位符后缀的索引
+			// 搜索第一个占位符后缀的索引
 			int endIndex = findPlaceholderEndIndex(result, startIndex);
 			if (endIndex != -1) {
 				// 提取第一个占位符中的原始字符串，如${server.port}->server.port
