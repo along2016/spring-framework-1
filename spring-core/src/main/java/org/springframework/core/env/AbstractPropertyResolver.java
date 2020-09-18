@@ -45,7 +45,9 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 	@Nullable
 	private volatile ConfigurableConversionService conversionService;
 
-	//ignoreUnresolvableNestedPlaceholders=true情况下创建的PropertyPlaceholderHelper实例
+	/**
+	 * ignoreUnresolvableNestedPlaceholders=true 情况下创建的 PropertyPlaceholderHelper 实例
+	 */
 	@Nullable
 	private PropertyPlaceholderHelper nonStrictHelper;
 
@@ -56,10 +58,14 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 	//是否忽略无法处理的属性占位符，这里是false，也就是遇到无法处理的属性占位符且没有默认值则抛出异常
 	private boolean ignoreUnresolvableNestedPlaceholders = false;
 
-	//属性占位符前缀，这里是"${"
+	/**
+	 * 属性占位符前缀，这里是"${"
+	 */
 	private String placeholderPrefix = SystemPropertyUtils.PLACEHOLDER_PREFIX;
 
-	//属性占位符后缀，这里是"}"
+	/**
+	 * 属性占位符后缀，这里是"}"
+	 */
 	private String placeholderSuffix = SystemPropertyUtils.PLACEHOLDER_SUFFIX;
 
 	//属性占位符解析失败的时候配置默认值的分隔符，这里是":"
@@ -234,7 +240,9 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 				resolvePlaceholders(value) : resolveRequiredPlaceholders(value));
 	}
 
-	// 创建一个新的PropertyPlaceholderHelper实例
+	/**
+	 * 创建一个新的 PropertyPlaceholderHelper 实例，此实例以 "${" 开头，以 "}" 结尾，以 ":" 分割。
+	 */
 	private PropertyPlaceholderHelper createPlaceholderHelper(boolean ignoreUnresolvablePlaceholders) {
 		return new PropertyPlaceholderHelper(this.placeholderPrefix, this.placeholderSuffix,
 				this.valueSeparator, ignoreUnresolvablePlaceholders);
