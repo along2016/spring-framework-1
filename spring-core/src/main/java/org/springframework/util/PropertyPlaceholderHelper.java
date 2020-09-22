@@ -49,15 +49,25 @@ public class PropertyPlaceholderHelper {
 		wellKnownSimplePrefixes.put(")", "(");
 	}
 
-	//基础属性
-	//占位符前缀，默认是"${"
+	// 基础属性
+	/**
+	 * 占位符前缀，默认是"${"
+	 */
 	private final String placeholderPrefix;
-	//占位符后缀，默认是"}"
+
+	/**
+	 * 占位符后缀，默认是"}"
+	 */
 	private final String placeholderSuffix;
-	//简单的占位符前缀，默认是"{"，主要用于处理嵌套的占位符如${xxxxx.{yyyyy}}
+
+	/**
+	 * 简单的占位符前缀，默认是"{"，主要用于处理嵌套的占位符如${xxxxx.{yyyyy}}
+	 */
 	private final String simplePrefix;
 
-	//默认值分隔符号，默认是":"
+	/**
+	 * 默认值分隔符号，默认是":"
+	 */
 	@Nullable
 	private final String valueSeparator;
 
@@ -109,7 +119,9 @@ public class PropertyPlaceholderHelper {
 	 * @param properties the {@code Properties} to use for replacement
 	 * @return the supplied value with placeholders replaced inline
 	 */
-	//替换属性占位符
+	/**
+	 * 替换属性占位符
+	 */
 	public String replacePlaceholders(String value, final Properties properties) {
 		Assert.notNull(properties, "'properties' must not be null");
 		return replacePlaceholders(value, properties::getProperty);
