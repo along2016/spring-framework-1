@@ -269,11 +269,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		}
 		else {
 			// Fail if we're already creating this bean instance:
-			// We're assumably within a circular reference.
-			//只有在单例情况下才会尝试解决循环依赖，原型模式情况下，如果存在
+			// We're assembly within a circular reference.
+			// 只有在单例情况下才会尝试解决循环依赖，原型模式情况下，如果存在
 			// A 中有 B 的属性，B 中有 A 的属性，那么当依赖注入的时候，就会产生当 A 还未创建完的时候
-			//因为对于 B 的创建再次返回创建 A，造成循环依赖，也就是下面的情况
-			//isPrototypeCurrentlyInCreation(beanName) 为 true
+			// 因为对于 B 的创建再次返回创建 A，造成循环依赖，也就是下面的情况 isPrototypeCurrentlyInCreation(beanName) 为 true
 			if (isPrototypeCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
@@ -286,7 +285,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
 				String nameToLookup = originalBeanName(name);
-				//递归到 BeanFactory 中寻找
+				// 递归到 BeanFactory 中寻找
 				if (parentBeanFactory instanceof AbstractBeanFactory) {
 					return ((AbstractBeanFactory) parentBeanFactory).doGetBean(
 							nameToLookup, requiredType, args, typeCheckOnly);
@@ -338,8 +337,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 
 				// Create bean instance.
-				//实例化依赖的 bean 后便可以实例化 mbd 本身了
-				//singleton 模式的创建
+				// 实例化依赖的 bean 后便可以实例化 mbd 本身 singleton 模式的创建
 				if (mbd.isSingleton()) {
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
@@ -358,7 +356,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 				else if (mbd.isPrototype()) {
 					// It's a prototype -> create a new instance.
-					//prototype 模式的创建（new）
+					// prototype 模式的创建（new）
 					Object prototypeInstance = null;
 					try {
 						beforePrototypeCreation(beanName);
@@ -1658,7 +1656,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
 
 		// Don't let calling code try to dereference the factory if the bean isn't a factory.
-		//如果指定的 name 是工厂相关（以 & 为前缀）且 beanInstance 又不是 FactoryBean 类型
+		// 如果指定的 name 是工厂相关（以 & 为前缀）且 beanInstance 又不是 FactoryBean 类型
 		// 则验证不通过
 		if (BeanFactoryUtils.isFactoryDereference(name)) {
 			if (beanInstance instanceof NullBean) {

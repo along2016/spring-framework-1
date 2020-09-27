@@ -820,7 +820,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 	/**
-	 * 确保所有没有设置non-lazy-init的单例被实例化,也考虑FactoryBeans。
+	 * 确保所有没有设置 non-lazy-init 的单例被实例化,也考虑 FactoryBeans。
 	 * 通常调用在这factory建立的最后
 	 * @throws BeansException
 	 */
@@ -940,21 +940,21 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			this.beanDefinitionMap.put(beanName, beanDefinition);
 		}
 		else {
-			// 检查bean的创建阶段是否已经开始，也就是说是否已经创建了
+			// 检查 bean 的创建阶段是否已经开始，也就是说是否已经创建了
 			if (hasBeanCreationStarted()) {
 				// Cannot modify startup-time collection elements anymore (for stable iteration)
 				// 无法修改启动时间收集元素（用于稳定迭代）
 				// 注册过程需要保证数据的一致性，所有需要加锁同步
 				synchronized (this.beanDefinitionMap) {
-					// 注册到beanDefinitionMap中
+					// 注册到 beanDefinitionMap 中
 					this.beanDefinitionMap.put(beanName, beanDefinition);
-					// 下面就是将当前beanName存放到beanDefinitionNames中
+					// 下面就是将当前 beanName 存放到 beanDefinitionNames 中
 					List<String> updatedDefinitions = new ArrayList<>(this.beanDefinitionNames.size() + 1);
 					updatedDefinitions.addAll(this.beanDefinitionNames);
 					updatedDefinitions.add(beanName);
 					this.beanDefinitionNames = updatedDefinitions;
-					// 如果单例模式的bean名单中有该bean的name，那么移除掉它。
-					// 也就是说着，将一个原本是单例模式的bean重新注册成一个普通的bean
+					// 如果单例模式的 bean 名单中有该 bean 的 name，那么移除掉它。
+					// 也就是说着，将一个原本是单例模式的 bean 重新注册成一个普通的 bean
 					if (this.manualSingletonNames.contains(beanName)) {
 						Set<String> updatedSingletons = new LinkedHashSet<>(this.manualSingletonNames);
 						updatedSingletons.remove(beanName);
@@ -962,7 +962,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}
 				}
 			}
-			// 仍处于启动阶段，bean还没有开始注册
+			// 仍处于启动阶段，bean 还没有开始注册
 			else {
 				// Still in startup registration phase
 				// 注册beanDefinition
@@ -1043,7 +1043,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 
 		// Reset all bean definitions that have the given bean as parent (recursively).
-		// 递归的方式来重置具有给定bean作为父项的所有bean定义。
+		// 递归的方式来重置具有给定 bean 作为父项的所有 bean 定义。
 		for (String bdName : this.beanDefinitionNames) {
 			if (!beanName.equals(bdName)) {
 				BeanDefinition bd = this.beanDefinitionMap.get(bdName);
