@@ -1455,6 +1455,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					return (Class<?>) evaluated;
 				}
 				else if (evaluated instanceof String) {
+					// 通过自己的 ClassUtils 的 forName 方法来实例化 class
 					return ClassUtils.forName((String) evaluated, classLoaderToUse);
 				}
 				else {

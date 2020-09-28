@@ -161,7 +161,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	@Override
 	@Nullable
 	public Object getSingleton(String beanName) {
-		//参数 true 设置标识允许早期依赖
+		// 参数 true 设置标识允许早期依赖
 		return getSingleton(beanName, true);
 	}
 
@@ -175,21 +175,21 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
-		//检查缓存中是否存在实例
+		// 检查缓存中是否存在实例
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
-			//如果为空，则锁定全局变量并进行处理
+			// 如果为空，则锁定全局变量并进行处理
 			synchronized (this.singletonObjects) {
-				//如果此 bean 正在加载则不处理
+				// 如果此 bean 正在加载则不处理
 				singletonObject = this.earlySingletonObjects.get(beanName);
 				if (singletonObject == null && allowEarlyReference) {
-					//当某些方法需要提前初始化的时候则会调用 addSingletonFactory 方法将对应的
+					// 当某些方法需要提前初始化的时候则会调用 addSingletonFactory 方法将对应的
 					// ObjectFactory 初始化策略存储在 singletonFactories
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 					if (singletonFactory != null) {
-						//调用预先设定的 getObject 方法
+						// 调用预先设定的 getObject 方法
 						singletonObject = singletonFactory.getObject();
-						//记录在缓存中，earlySingletonObjects 和 singletonFactories互斥
+						// 记录在缓存中，earlySingletonObjects 和 singletonFactories 互斥
 						this.earlySingletonObjects.put(beanName, singletonObject);
 						this.singletonFactories.remove(beanName);
 					}
@@ -209,9 +209,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
 		Assert.notNull(beanName, "Bean name must not be null");
-		//全局变量需要同步
+		// 全局变量需要同步
 		synchronized (this.singletonObjects) {
-			//首先检查对应的 bean 是否已经加载过，因为 singleton 模式其实就是复用已创建的 bean，所以这一步是必须的
+			// 首先检查对应的 bean 是否已经加载过，因为 singleton 模式其实就是复用已创建的 bean，所以这一步是必须的
 			Object singletonObject = this.singletonObjects.get(beanName);
 			//如果为空才可以进行 singleton 的 bean 的初始化
 			if (singletonObject == null) {
