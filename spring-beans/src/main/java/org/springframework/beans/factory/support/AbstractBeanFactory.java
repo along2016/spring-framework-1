@@ -280,8 +280,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			// Check if bean definition exists in this factory.
 			// 检查工厂中是否存在 bean 定义
 			BeanFactory parentBeanFactory = getParentBeanFactory();
-			//如果 beanDefinitionMap 中也就是在所有已经加载的类中不包括 beanName 则尝试从
-			//parentBeanFactory 中检测
+			// 如果 beanDefinitionMap 中也就是在所有已经加载的类中不包括 beanName，则尝试从 parentBeanFactory 中检测
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
 				String nameToLookup = originalBeanName(name);
@@ -309,8 +308,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			try {
-				//将存储XML配置文件的 GenericBeanDefinition 转换为 RootBeanDefinition，
-				//如果指定 BeanName 是子 Bean 的话同时会合并父类的相关属性
+				// 将存储 XML 配置文件的 GenericBeanDefinition 转换为 RootBeanDefinition，
+				// 如果指定 BeanName 是子 Bean 的话同时会合并父类的相关属性
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
 
@@ -1282,7 +1281,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			RootBeanDefinition mbd = null;
 
 			// Check with full lock now in order to enforce the same merged instance.
-			// 现在检查full lock，以强制执行相同的合并实例。
+			// 检查 full lock，以强制执行相同的合并实例。
 			if (containingBd == null) {
 				mbd = this.mergedBeanDefinitions.get(beanName);
 			}
@@ -1290,7 +1289,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			if (mbd == null) {
 				if (bd.getParentName() == null) {
 					// Use copy of given root bean definition.
-					// 使用给定root bean的副本
+					// 使用给定 root bean 的副本
 					if (bd instanceof RootBeanDefinition) {
 						mbd = ((RootBeanDefinition) bd).cloneBeanDefinition();
 					}
@@ -1647,6 +1646,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Get the object for the given bean instance, either the bean
 	 * instance itself or its created object in case of a FactoryBean.
+	 *
+	 * 获取给定 bean  实例的对象，对于 FactoryBean，可以是 bean 实例本身，也可以是它创建的对象。
+	 *
 	 * @param beanInstance the shared bean instance
 	 * @param name name that may include factory dereference prefix
 	 * @param beanName the canonical bean name
@@ -1657,8 +1659,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
 
 		// Don't let calling code try to dereference the factory if the bean isn't a factory.
-		// 如果指定的 name 是工厂相关（以 & 为前缀）且 beanInstance 又不是 FactoryBean 类型
-		// 则验证不通过
+		// 如果指定的 name 是工厂相关（以 & 为前缀）且 beanInstance 又不是 FactoryBean 类型则验证不通过
 		if (BeanFactoryUtils.isFactoryDereference(name)) {
 			if (beanInstance instanceof NullBean) {
 				return beanInstance;
@@ -1671,32 +1672,31 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
 		// If it's a FactoryBean, we use it to create a bean instance, unless the
 		// caller actually wants a reference to the factory.
-		//现在我们有了个 bean 的实例，这个实例可能会使正常的 bean 或者是 FactoryBean
-		//如果是 FactoryBean 我们使用它创建实例，但是如果用户想要直接获取工厂实例而不是工厂
-		//的 getObject 方法对应的实例那么传入的 name 应该加入前缀 &
+		// 现在我们有了个 bean 的实例，这个实例可能会是正常的 bean 或者是 FactoryBean。
+		// 如果是 FactoryBean 我们使用它创建实例，但是如果用户想要直接获取工厂实例而不是工厂
+		// 的 getObject 方法对应的实例那么传入的 name 应该加入前缀 &
 		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
 			return beanInstance;
 		}
 
-		//加载 FactoryBean
+		// 加载 FactoryBean
 		Object object = null;
 		if (mbd == null) {
-			//尝试从缓存中加载 bean
+			// 尝试从缓存中加载 bean
 			object = getCachedObjectForFactoryBean(beanName);
 		}
 		if (object == null) {
 			// Return bean instance from factory.
-			//到这里已经明确知道 beanInstance 一定是 FactoryBean 类型
+			// 到这里已经明确知道 beanInstance 一定是 FactoryBean 类型
 			FactoryBean<?> factory = (FactoryBean<?>) beanInstance;
 			// Caches object obtained from FactoryBean if it is a singleton.
-			//containsBeanDefinition 检测 beanDefinitionMap 中也就是在所有已经加载的类中
-			//检测是否定义 beanName
+			// containsBeanDefinition 检测 beanDefinitionMap 中也就是在所有已经加载的类中检测是否定义 beanName。
 			if (mbd == null && containsBeanDefinition(beanName)) {
-				//将存储在XML配置文件的 GenericBeanDefinition 转换为 RootBeanDefinition，如果指定
-				//BeanName 是子 Bean 的话同时会合并父类的相关属性
+				// 将存储在XML配置文件的 GenericBeanDefinition 转换为 RootBeanDefinition，如果指定
+				// BeanName 是子 Bean 的话同时会合并父类的相关属性。
 				mbd = getMergedLocalBeanDefinition(beanName);
 			}
-			//是否是用户定义的而不是应用程序本身定义的
+			// 是否是用户定义的而不是应用程序本身定义的
 			boolean synthetic = (mbd != null && mbd.isSynthetic());
 			object = getObjectFromFactoryBean(factory, beanName, !synthetic);
 		}

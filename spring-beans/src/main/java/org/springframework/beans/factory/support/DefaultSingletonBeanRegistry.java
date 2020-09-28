@@ -213,7 +213,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		synchronized (this.singletonObjects) {
 			// 首先检查对应的 bean 是否已经加载过，因为 singleton 模式其实就是复用已创建的 bean，所以这一步是必须的
 			Object singletonObject = this.singletonObjects.get(beanName);
-			//如果为空才可以进行 singleton 的 bean 的初始化
+			// 如果为空才可以进行 singleton 的 bean 的初始化
 			if (singletonObject == null) {
 				if (this.singletonsCurrentlyInDestruction) {
 					throw new BeanCreationNotAllowedException(beanName,
@@ -343,7 +343,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 
 	/**
 	 * Callback before singleton creation.
+	 * 单例创建前的回调。
 	 * <p>The default implementation register the singleton as currently in creation.
+	 * 默认实现将单例对象注册为当前创建中。
 	 * @param beanName the name of the singleton about to be created
 	 * @see #isSingletonCurrentlyInCreation
 	 */
