@@ -244,6 +244,8 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 
 	/**
 	 * Perform a scan within the specified base packages.
+	 * （在指定的基础包中进行扫描，例如："org.springframework.context.annotation6"）
+	 *
 	 * @param basePackages the packages to check for annotated classes
 	 * @return number of beans registered
 	 */
