@@ -1241,8 +1241,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 				return multipleBeans;
 			}
 
+			// 根据属性类型找到 beanFactory 中所有类型的匹配 bean，
+			// 返回值的构成为：key=匹配的 beanName，value=beanName 对应的实例化后的 bean（通过 getBean(beanName) 返回）
 			Map<String, Object> matchingBeans = findAutowireCandidates(beanName, type, descriptor);
 			if (matchingBeans.isEmpty()) {
+				// 如果 autowire 的 require 属性为 true 而找到的匹配项却为空则只能抛出异常
 				if (isRequired(descriptor)) {
 					raiseNoMatchingBeanFound(type, descriptor.getResolvableType(), descriptor);
 				}
